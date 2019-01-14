@@ -4,6 +4,8 @@
 Created on Sat Nov 24 11:30:34 2018
 
 @author: pete
+
+Functions for gravitational wave analysis.
 """
 
 import numpy as np

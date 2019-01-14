@@ -4,6 +4,8 @@
 Created on Mon Dec  3 23:06:38 2018
 
 @author: pete
+
+Functions for creation of geodesic grids in 3-dimensions.
 """
 
 import numpy as np

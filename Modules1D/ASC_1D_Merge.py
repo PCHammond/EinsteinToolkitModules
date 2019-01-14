@@ -4,6 +4,8 @@
 Created on Sun Nov 11 12:34:05 2018
 
 @author: pete
+
+Functions for merging 1+1-dimensional data in ASC files.
 """
 
 import numpy as np

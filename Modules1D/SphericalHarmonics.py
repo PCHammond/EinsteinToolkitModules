@@ -4,6 +4,8 @@
 Created on Thu Nov 29 16:35:05 2018
 
 @author: pch1g13
+
+Functions for dealing with spin-weighted spherical harmonics.
 """
 
 from scipy.special import comb

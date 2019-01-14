@@ -4,6 +4,8 @@
 Created on Wed Nov 21 21:50:00 2018
 
 @author: pete
+
+Functions for tracking the location of the maxium density.
 """
 
 import numpy as np

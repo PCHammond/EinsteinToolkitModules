@@ -4,6 +4,8 @@
 Created on Tue Nov 27 18:33:59 2018
 
 @author: pch1g13
+
+Functions for determining variable maxima values and locations.
 """
 
 import numpy as np

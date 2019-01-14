@@ -4,6 +4,8 @@
 Created on Tue Dec  4 17:27:36 2018
 
 @author: pch1g13
+
+Functions for generating a nearest neighbour interpolation of an approximately equal-density spherical sample grid onto a latitude-longitude grid.
 """
 ### Add Python folder to sys.path ###
 import sys
