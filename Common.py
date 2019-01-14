@@ -4,6 +4,8 @@
 Created on Sun Nov 11 12:34:05 2018
 
 @author: pete
+
+Common functions for EinsteinToolkitModules
 """
 
 import numpy as np
@@ -38,7 +40,7 @@ def GetMassFactor(output_units):
     elif output_units=="cgs":
         return Mdot*1000.0
     else:
-        raise
+        raise ValueError("output_units specified not recognised. See DocString for available units.")
 
 def GetLengthFactor(output_units):
     """
@@ -71,7 +73,7 @@ def GetLengthFactor(output_units):
     elif output_units=="km":
         return (G*Mdot*c**-2)/1000.0
     else:
-        raise
+        raise ValueError("output_units specified not recognised. See DocString for available units.")
 
 def GetTimeFactor(output_units):
     """
@@ -101,7 +103,7 @@ def GetTimeFactor(output_units):
     elif output_units=="ms":
         return (G*Mdot*c**-3)*1.0e3
     else:
-        raise
+        raise ValueError("output_units specified not recognised. See DocString for available units.")
 
 def GenerateDirectories(number_of_directories, subfolder=None):
     """
