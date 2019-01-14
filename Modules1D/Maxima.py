@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 27 18:33:59 2018
+
+@author: pch1g13
+"""
+
+import numpy as np
+
+### Get location of maximum value of density
+def FindMaxRho(simulation_directory,input_directory):
+    data_raw = np.load(simulation_directory + input_directory + "hydrobase-rho.scalars.npy")
+    return np.max(data_raw[:,3])
+    
