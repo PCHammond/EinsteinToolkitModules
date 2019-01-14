@@ -8,6 +8,7 @@ To do
 To do
 
 ## Repository structure:
+```
 EinsteinToolkitModules
 ├── Common.py
 ├── __init__.py
@@ -43,3 +44,4 @@ EinsteinToolkitModules
     ├── GWAnalysisMaster_template.py
     ├── GWAnalysisWeyl4Extrap_template.py
     └── SphericalGWAnalysis_template.py
+```
