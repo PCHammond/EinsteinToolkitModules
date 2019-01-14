@@ -1,4 +1,8 @@
 # Tasks
+## Analysis
+### Gravitational Waves
+- [ ] Distance-based STFT comparison
+
 ## Docstrings
 ### GW_Library.py
 - [ ] ScaleByRadius
