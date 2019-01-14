@@ -1,6 +1,6 @@
 # Tasks
 ## Docstrings
 ### GW_Library.py
-[ ] ScaleByRadius
-[ ] WeightedSumExtrapStrain
-[ ] PolyExtrapStrain
+- [ ] ScaleByRadius
+- [ ] WeightedSumExtrapStrain
+- [ ] PolyExtrapStrain
