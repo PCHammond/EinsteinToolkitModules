@@ -3,7 +3,11 @@
 ### Gravitational Waves
 - [ ] Distance-based STFT comparison
 
-## Docstrings
+## Documentation
+### Readme
+ - [ ] Description of scripts
+ - [ ] Description of libraries
+ 
 ### GW_Library.py
 - [ ] ScaleByRadius
 - [ ] WeightedSumExtrapStrain
