@@ -142,7 +142,7 @@ def GetWindowingFunction(window_type, samples, **kwargs):
     planck - Planck window - takes optional parameter epsilon
     """
     
-    if window_type=="hann": 
+    if window_type=="hann":
         window_arr = signal.windows.hann(samples,kwargs)
     elif window_type=="tukey":
         window_arr = signal.windows.tukey(samples,kwargs["alpha"])
