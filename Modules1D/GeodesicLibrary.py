@@ -12,21 +12,21 @@ import numpy as np
 from math import sqrt, floor, ceil
 
 ### Rotation Matricies
-# X-Axis
 def Rot_X(theta):
+    """Rotation matrix for rotation about X-Axis."""
     return np.array([[1.0,          0.0,           0.0],
                      [0.0,np.cos(theta),-np.sin(theta)],
                      [0.0,np.sin(theta), np.cos(theta)]])
 
-# Z-Axis
 def Rot_Z(theta):
+    """Rotation matrix for rotation about Z-Axis."""
     return np.array([[np.cos(theta),-np.sin(theta),0.0],
                      [np.sin(theta), np.cos(theta),0.0],
                      [          0.0,           0.0,1.0]])
 
 ### Rotation Functions
-# Extrinstic davenport rotation of Vector through euler angles Alpha, Beta, Gamma using z-x-z
 def Rot_3D(Vector, Alpha, Beta, Gamma):
+    """Extrinstic davenport rotation of Vector through euler angles Alpha, Beta, Gamma using z-x-z."""
     R1 = Rot_Z(Alpha)
     R2 = Rot_X(Beta)
     R3 = Rot_Z(Gamma)
@@ -35,8 +35,8 @@ def Rot_3D(Vector, Alpha, Beta, Gamma):
     Result = np.dot(R3,V2)
     return Result
 
-# Rotation of Vector about axis through Angle
 def Rotate_About_Axis(Vector,Axis,Angle):
+    """Rotation of Vector about Axis through Angle."""
     ux = Axis[0]
     uy = Axis[1]
     uz = Axis[2]
@@ -47,8 +47,9 @@ def Rotate_About_Axis(Vector,Axis,Angle):
                   [uz*ux*(1-c)-uy*s,uz*uy*(1-c)+ux*s,   c+uz*uz*(1-c)]])
     return np.dot(R,Vector)
 
-# Rotation of triangles through Rot_3D
+# Rotation of triangles using Rot_3D
 def Rotate_Triangles(Triangles,Alpha,Beta,Gamma):
+    """Extrinstic davenport rotation of Triangles through euler angles Alpha, Beta, Gamma using z-x-z."""
     Rotated_Triangles = np.zeros(Triangles.shape)
     for i in range(len(Triangles)):
         Rotated_Triangles[i,0] = Rot_3D(Triangles[i,0], Alpha, Beta, Gamma)
@@ -56,8 +57,8 @@ def Rotate_Triangles(Triangles,Alpha,Beta,Gamma):
         Rotated_Triangles[i,2] = Rot_3D(Triangles[i,2], Alpha, Beta, Gamma)
     return Rotated_Triangles
 
-### Generation of base Icosahedron
 def Generate_Icosahedron(radius=1.0):
+    """Generation of base icosahedron."""
     phi = 0.5*(1.0+np.sqrt(5.0))
     
     Vertices = np.array([[ 0.0, 1.0, phi],
@@ -97,8 +98,8 @@ def Generate_Icosahedron(radius=1.0):
     return Triangles
 
 ### Functions for determining attributes of spherical triangles
-# Centres of mass of spherical Triangles
 def Get_Triangle_COMs(Triangles):
+    """Centres of mass of spherical Triangles."""
     COMs = np.zeros((len(Triangles),3))
     for i in range(len(Triangles)):
         a = np.cross(Triangles[i,0],Triangles[i,1])/np.linalg.norm(np.cross(Triangles[i,0],Triangles[i,1]))
@@ -110,8 +111,8 @@ def Get_Triangle_COMs(Triangles):
         COMs[i] = (a*A+b*B+c*C)/np.linalg.norm(a*A+b*B+c*C)
     return COMs
 
-# Areas of spherical Traingles assuming sphere radius of 1
 def Get_Triangle_Base_Areas(Triangles):
+    """Areas of spherical Traingles assuming unit sphere."""
     Areas = np.zeros(len(Triangles))
     for i in range(len(Triangles)):
         a = np.arccos(np.dot(Triangles[i,0],Triangles[i,1])/(np.linalg.norm(Triangles[i,0]))*np.linalg.norm(Triangles[i,1]))
@@ -123,6 +124,7 @@ def Get_Triangle_Base_Areas(Triangles):
 
 ### Division of triangles
 def Divide_Triangles_Angle(Triangles,Amount):
+    """Division of triangles into Amount**2 smaller triangles of approximately equal area."""
     A2 = pow(Amount,2)
     Final_Triangles = np.zeros((len(Triangles)*A2,3,3))
     for t in range(len(Triangles)):
@@ -186,8 +188,8 @@ def Divide_Triangles_Angle(Triangles,Amount):
                 Final_Triangles[t*A2+i*i+2*j+2,2] = Points[i+1,j+2]
     return Final_Triangles
 
-### Conversion of coordsCart to spherical angles theta, phi
 def GetSphericalCoordsFromCart(coordsCart):
+    """Conversion of coordsCart to spherical angles theta, phi."""
     coordsSpherical = np.zeros((len(coordsCart),2))
     coordsSpherical[:,0] = np.arccos(coordsCart[:,2]/np.linalg.norm(coordsCart,axis=-1))
     coordsSpherical[:,1] = np.arctan2(coordsCart[:,1],coordsCart[:,0])
@@ -195,15 +197,15 @@ def GetSphericalCoordsFromCart(coordsCart):
     #print(coordsCart.shape)
     return coordsSpherical
 
-### Rotation required to move vector on to Z axis
 def GetRotationToZ(vector):
+    """Rotation required to move vector on to Z-Axis."""
     ZAxis = np.array([0.0,0.0,1.0])
     rotationAxis = np.cross(vector,ZAxis)/np.linalg.norm(np.cross(vector,ZAxis))
     rotationAngle = np.arccos(np.dot(vector,ZAxis)/np.linalg.norm(vector))
     return rotationAxis, -rotationAngle
 
-### Wrapper for Rotate_About_Axis
 def RotateVectors(vectors,axis,angle):
+    """Wrapper for Rotate_About_Axis."""
     output_vectors = np.zeros(vectors.shape)
     for i in range(len(vectors)):
         output_vectors[i] = Rotate_About_Axis(vectors[i],axis,angle)

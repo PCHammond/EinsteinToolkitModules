@@ -17,12 +17,15 @@ from math import sqrt, ceil
 
 ### Coordinate transformations from theta,phi to lat,long
 def ThetaToLat(thetas):
+    """Coordinate transformations from theta to lat."""
     return 0.5*np.pi-thetas
 
 def PhiToLong(phis):
+    """Coordinate transformations from phi to long."""
     return phis - 2.0*np.pi*(phis>np.pi)
 
 def ThetaPhiToLatLong(coordsSpherical):
+    """Coordinate transformations from theta, phi to lat, long."""
     coordsLatLong = np.zeros(coordsSpherical.shape)
     coordsLatLong[:,0] = ThetaToLat(coordsSpherical[:,0])
     coordsLatLong[:,1] = PhiToLong(coordsSpherical[:,1])
@@ -30,6 +33,7 @@ def ThetaPhiToLatLong(coordsSpherical):
 
 ### Transformations from spherical angles to unit vectors
 def ThetaPhisToUnitVec(thetaPhis):
+    """Coordinate transformations from theta, phi to x, y, z."""
     vecs = np.zeros((len(thetaPhis),3))
     vecs[:,0] = np.sin(thetaPhis[:,0])*np.cos(thetaPhis[:,1])
     vecs[:,1] = np.sin(thetaPhis[:,0])*np.sin(thetaPhis[:,1])
@@ -37,14 +41,15 @@ def ThetaPhisToUnitVec(thetaPhis):
     return vecs
 
 def LatLonsToUnitVec(latLons):
+    """Coordinate transformations from lat, long to x, y, z."""
     vecs = np.zeros((len(latLons),3))
     vecs[:,0] = np.cos(latLons[:,0])*np.cos(latLons[:,1])
     vecs[:,1] = np.cos(latLons[:,0])*np.sin(latLons[:,1])
     vecs[:,2] = np.sin(latLons[:,0])
     return vecs
 
-### Find closest neighbours_vec to point_vec
 def FindNearestNeighbour(point_vec,neighbours_vec):
+    """Find closest neighbours_vec to point_vec."""
     best_dot = -1.0
     best_neighbour = 0
     for i in range(len(neighbours_vec)):
@@ -56,7 +61,7 @@ def FindNearestNeighbour(point_vec,neighbours_vec):
 
 def GetNearestNeighbourArrays(sampling_points,theta_samples,phi_samples,roundup=False):
     """
-    Get nearest neighbour interpolation array from geodesic samples onto lat-long grid
+    Get nearest neighbour interpolation array from geodesic samples onto lat-long grid.
 
     Args:
     sampling_points - int - requested number of samples for geodesic grid

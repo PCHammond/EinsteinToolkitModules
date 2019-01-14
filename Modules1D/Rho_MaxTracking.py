@@ -12,7 +12,7 @@ import numpy as np
 
 def GetMaxRhoLocs(simulation_directory,data_directory):
     """
-    Get location of maximum density in full x,y,z where data is only available for 0<x rotated pi about Z-Axis
+    Get location of maximum density in full x,y,z where data is only available for 0<x rotated pi about Z-Axis.
 
     Args:
     simulation_directory - str - absolute location of simulation
@@ -57,10 +57,10 @@ def GetMaxRhoLocs(simulation_directory,data_directory):
     
     return times, coords
 
-### Get radii from coords [[x0,y0,z0],[x1,y1,z1],...,[xn,yn,zn]]
 def GetRadiiFromCoords(coords):
+    """Get radii from coords [[x0,y0,z0],[x1,y1,z1],...,[xn,yn,zn]]."""
     return np.linalg.norm(coords,axis=1)
 
-### Get instantaneous frequency of rotation about Z from coords [[x0,y0,z0],[x1,y1,z1],...,[xn,yn,zn]]
 def GetFreqInstFromCoords(times, coords):
+    """Get instantaneous frequency of rotation about Z from coords [[x0,y0,z0],[x1,y1,z1],...,[xn,yn,zn]]."""
     return np.gradient(np.unwrap(np.arctan2(coords[:,1],coords[:,0])))/np.gradient(times)/(2.0*np.pi)    

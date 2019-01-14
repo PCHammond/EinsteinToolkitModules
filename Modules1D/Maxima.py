@@ -10,8 +10,8 @@ Functions for determining variable maxima values and locations.
 
 import numpy as np
 
-### Get location of maximum value of density
 def FindMaxRho(simulation_directory,input_directory):
+    """Get location of maximum value of density."""
     data_raw = np.load(simulation_directory + input_directory + "hydrobase-rho.scalars.npy")
     return np.max(data_raw[:,3])
     

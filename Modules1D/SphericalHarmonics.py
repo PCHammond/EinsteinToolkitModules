@@ -15,7 +15,7 @@ from cmath import exp
 ### _s Y _l _m
 def GetSpinWeightedSphericalYDD(s,l,m,theta,phi):
     """
-    Get sYlm(theta,phi)
+    Get sYlm(theta,phi).
 
     Args:
     s - int - spin weight
