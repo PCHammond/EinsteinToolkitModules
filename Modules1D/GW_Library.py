@@ -116,7 +116,7 @@ def LoadHarmonic(simulation_directory,input_directory,harmonic,radii_str_list,ti
         testarray = np.load(simulation_directory + input_directory + filename_base + radii_str_list[0] + ".npy")
         time_count = len(testarray[:,0])
     elif not(time_count):
-        raise
+        raise ValueError("No method to determine number of time samples, either provide time_count or use get_time_count=True")
     data_raw = np.zeros((len(radii_str_list),time_count,3))
     for rad_idx in range(len(radii_str_list)):
         data_raw[rad_idx,:,:] = np.load(simulation_directory + input_directory + filename_base + radii_str_list[rad_idx] + ".npy")
