@@ -4,6 +4,8 @@
 Created on Tue Nov 27 16:42:41 2018
 
 @author: pch1g13
+
+2+1-dimensional interpolation of data variables.
 """
 import sys, os.path
 ETM_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -16,6 +18,9 @@ from scipy.interpolate import RectBivariateSpline
 import numpy as np
 
 def RotateAndCopyY_angle(data):
+    """
+    Transformation of angle data by rotating data in +ve x half of the domain about the origin onto the -ve x half of the domain and adding or subtracting pi.
+    """
     shape_original = np.asarray(data.shape)
     shape_new = np.array([shape_original[0]*2 - 1, shape_original[1]])
     result = np.zeros(shape_new)
@@ -27,6 +32,9 @@ def RotateAndCopyY_angle(data):
     return result
 
 def RotateAndCopyY(data):
+    """
+    Transformation of data by rotating data in +ve x half of the domain about the origin onto the -ve x half of the domain.
+    """
     shape_original = np.asarray(data.shape)
     shape_new = np.array([shape_original[0]*2 - 1, shape_original[1]])
     result = np.zeros(shape_new)
@@ -35,6 +43,9 @@ def RotateAndCopyY(data):
     return result
 
 def ReflectY(data):
+    """
+    Not currently supported.
+    """
     shape_original = np.asarray(data.shape)
     shape_new = np.array([shape_original[0]*2 - 1, shape_original[1]])
     result = np.zeros(shape_new)
@@ -51,7 +62,25 @@ def Interp2DScalar(list_rLs,
                    clip_bounds=np.array([0.0,1.0]),
                    k_spline=1,
                    transforms=None):
-    
+    """
+    Interpolation of scalar data in refened mesh onto continuous domain.
+
+    Args:
+    list_rLs - list of refinement levels for interpolation
+    list_keys - list of HDF5 keys
+    xs - output x coordinates
+    ys - output y coordinates
+    file_input - HDF5 file containing keys
+
+    Kwargs:
+    do_clip=False - bool - clip data outside clip_bounds
+    clip_bounds=np.array([0.0,1.0]) - array(float) - bounds for clipping of data
+    k_spline=1 - int - degree of spline representation
+    transforms=None - list(str) - transformations to appy to data after interpolation
+
+    Returns:
+    array(float) - interpolated and possibly transformed data
+    """
     output = np.zeros((len(xs),len(ys)))
     for rL in list_rLs:
         keys_rL = GetKeysForRefinement_Level(rL,list_keys)
@@ -81,8 +110,8 @@ def Interp2DScalar(list_rLs,
         for i in range(len(transforms)):
             if transforms[i] == "rotate_right_half":
                 output = RotateAndCopyY(output)
-            elif transforms[i] == "reflect_y":
-                output = ReflectY(output)
+            #elif transforms[i] == "reflect_y":
+            #    output = ReflectY(output)
             else:
                 raise ValueError("Unknown tranformation requested")
             
@@ -99,7 +128,28 @@ def Interp2DSpeedDirection(list_rLs,
                            clip_bounds=np.array([[0.0,1.0],[-np.pi,np.pi]]),
                            k_spline=1,
                            transforms=None):
-    
+    """
+    Interpolation of velocity data in refened mesh onto continuous domain returning velocity magnitude and direction.
+
+    Args:
+    list_rLs - list of refinement levels for interpolation
+    list_keys_velx - list of HDF5 keys for x component of velocity
+    list_keys_vely - list of HDF5 keys for y component of velocity
+    xs - output x coordinates
+    ys - output y coordinates
+    file_input_velx - HDF5 file containing keys
+    file_input_velx - HDF5 file containing keys
+
+    Kwargs:
+    do_clip=[False,False] - list(bool) - clip data outside clip_bounds for speed and/or direction respectively
+    clip_bounds=np.array([[0.0,1.0],[-np.pi,np.pi]]) - array(float) - bounds for clipping of data for speed and/or direction respectively
+    k_spline=1 - int - degree of spline representation
+    transforms=None - list(str) - transformations to appy to data after interpolation
+
+    Returns:
+    array(float) - interpolated and possibly transformed speed data
+    array(float) - interpolated and possibly transformed direction data
+    """
     output_speed = np.zeros((len(xs),len(ys)))
     output_direc = np.zeros((len(xs),len(ys)))
     

@@ -12,12 +12,6 @@
  - [ ] Description of scripts
  - [ ] Description of libraries
 
-### HDF5_2D_Merge.py
-- All
-
-### Interp2D.py
-- All
-
 ### Plot2D.py
 - All
 
