@@ -39,14 +39,9 @@ template_filenames = ["DataMerge_template.py",
                       "GWAnalysisWeyl4Extrap_template.py"]
 
 # Names for output scripts
-output_filenames = ["DataMerge.py",
-                    "GWAnalysis.py",
-                    "Rho2DFrames.py",
-                    "ClearCheckpoints.py",
-                    "Tracer2DFrames.py",
-                    "VelRho2DFrames.py",
-                    "SphericalGWs.py",
-                    "GWAnalysisWeyl4.py"]
+output_filenames = []
+for i in range(len(template_filenames)):
+    output_filenames.append(template_filenames[i][:-12] + ".py")
 
 ### Verify directory structure
 if not(os.path.isdir(simulationDirectory + scriptDirectory)):
