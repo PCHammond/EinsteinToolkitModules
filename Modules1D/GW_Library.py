@@ -213,6 +213,7 @@ def GetRetardedTimes(times,radii):
     return output
 
 def ScaleByRadius(strain_data,radii):
+    """Scales strain_data by radii."""
     output = np.zeros(strain_data.shape,dtype=complex)
     
     for i in range(len(radii)):
@@ -358,6 +359,20 @@ def DoExtrapStrain(strain_data_scaled,retarded_times,extrap_times,radii,verbose=
 def WeightedSumExtrapStrain(strain_data_scaled,retarded_times,extrap_times,radii,verbose=False):
     """
     Weighted sum extrapolation of strain.
+
+    Args:
+    strain_data_scaled - array(float) - strain data scaled by sample radius
+    retarded_times - array(float) - sample times for strain data
+    extrap_times - array(float) - times for final extrapolation
+    radii - array(float) - sample radii for strain data
+
+    Kwargs:
+    verbose=False - bool - print messages to IO
+
+    Returns:
+    array(complex) - extrapolated strain data
+
+    Extrapolates strain data to observer at infinity by taking average of rh weighted by r.
     """
     denominator = 0.0
     cplx_extrap = np.zeros(len(extrap_times),dtype=complex)
@@ -376,6 +391,20 @@ def WeightedSumExtrapStrain(strain_data_scaled,retarded_times,extrap_times,radii
 def PolyExtrapStrain(strain_data_scaled,retarded_times,extrap_times,radii,radii_power=-2.0,order=1,verbose=False):
     """
     Polynomial extrapolation of strain data.
+
+    Args:
+    strain_data_scaled - array(float) - strain data scaled by sample radius
+    retarded_times - array(float) - sample times for strain data
+    extrap_times - array(float) - times for final extrapolation
+    radii - array(float) - sample radii for strain data
+
+    Kwargs:
+    radii_power=-2.0 - float - polynomial fitted as P(radius**radii_power)
+    order=1 - int - order of fitting polynomial to use for extrapolation
+    verbose=False - bool - print messages to IO
+
+    Returns:
+    array(float) - extrapolated strain data
     """
     #cplx_interp = np.zeros((len(radii),len(extrap_times)),dtype=complex)
     mag_interp = np.zeros((len(radii),len(extrap_times)))

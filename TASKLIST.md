@@ -7,11 +7,6 @@
 ### Readme
  - [ ] Description of scripts
  - [ ] Description of libraries
- 
-### GW_Library.py
-- [ ] ScaleByRadius
-- [ ] WeightedSumExtrapStrain
-- [ ] PolyExtrapStrain
 
 ### Common2D.py
 - All
