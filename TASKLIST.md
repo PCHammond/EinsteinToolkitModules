@@ -12,5 +12,3 @@
  - [ ] Description of scripts
  - [ ] Description of libraries
 
-### Colour.py
-- All

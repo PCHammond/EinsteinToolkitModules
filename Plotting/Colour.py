@@ -4,6 +4,8 @@
 Created on Sat Nov 24 16:38:39 2018
 
 @author: pete
+
+Functions for colourspaces.
 """
 
 import numpy as np
@@ -11,11 +13,17 @@ from colour import CCT_to_uv, STANDARD_OBSERVERS_CMFS
 import warnings
 
 def uvToxyY(uv):
+    """
+    Convert from uv colourspace to xyY.
+    """
     x = 3*uv[0]/(2*uv[0] - 8*uv[1] + 4)
     y = 2*uv[1]/(2*uv[0] - 8*uv[1] + 4)
     return np.array([x,y,1.0])
 
 def GetCIExyYfromuv(T,D_uv = 0.00322335):
+    """
+    Convert from uv(T) to CIExyY.
+    """
     cmfs = STANDARD_OBSERVERS_CMFS['CIE 1931 2 Degree Standard Observer']
     if T>500.0:
         if T<2e5:
@@ -27,13 +35,16 @@ def GetCIExyYfromuv(T,D_uv = 0.00322335):
     return uvToxyY(uv)
     
 def GetCIExyY(T):
+    """
+    Get CIExyY(T).
+    """
     T3_arr = np.array([(10**9)/(T**3),(10**6)/(T**2),(10**3)/(T),1.0])
     if (1667.0<=T)and(T<=4000.0):
         x = np.sum(np.array([-0.2661239,-0.2343589,0.8776956,0.179910]) * T3_arr)
     elif (4000.0<=T)and(T<=25000.0):
         x = np.sum(np.array([-3.0258469,2.1070379,0.2226347,0.240390]) * T3_arr)
     else:
-        raise
+        raise ValueError
     
     x3_arr = np.array([x**3,x**2,x,1.0])
     if (1667.0<=T)and(T<=2222.0):
@@ -43,11 +54,14 @@ def GetCIExyY(T):
     elif (4000.0<=T)and(T<=25000.0):
         y = np.sum(np.array([3.0817580,-5.87338670,3.75112997,-0.37001483]) * x3_arr)
     else:
-        raise
+        raise ValueError
     
     return np.array([x, y, 1.0])
 
 def GetsRGBfromxyY(xyY):
+    """
+    Convert from xyY to SRGB.
+    """
     X = xyY[2] * xyY[0] / xyY[1]
     Y = xyY[2]
     Z = xyY[2] * (1-xyY[0]-xyY[1]) / xyY[1]
@@ -67,6 +81,9 @@ def GetsRGBfromxyY(xyY):
     return sRGB
 
 def GetsRGBfromTemp(T):
+    """
+    Wrapper for GetCIExyYfromuv and GetsRGBfromxyY.
+    """
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message='"domain" and "range" variables have different size, "range" variable will be resized to "domain" variable shape!')
         xyY = GetCIExyYfromuv(T)
@@ -74,6 +91,9 @@ def GetsRGBfromTemp(T):
     return np.clip(sRGB, 0.0, 1.0)
 
 def Linmap(vals):
+    """
+    Remap vals from 0 at min(vals) to 1.0 at max(vals).
+    """
     return (vals - vals.min())/(vals.max() - vals.min())
 
 def test(n=1001):
