@@ -12,8 +12,5 @@
  - [ ] Description of scripts
  - [ ] Description of libraries
 
-### HDF5_3D_Merge.py
-- All
-
 ### Colour.py
 - All
