@@ -1,4 +1,8 @@
 # Tasks
+## Workflow
+### Script Generation
+- [ ] Machine based dictionaries for templates
+
 ## Analysis
 ### Gravitational Waves
 - [ ] Distance-based STFT comparison
