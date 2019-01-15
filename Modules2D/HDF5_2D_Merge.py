@@ -4,6 +4,8 @@
 Created on Wed Oct 24 16:47:34 2018
 
 @author: pch1g13
+
+Functions for merging 2+1-dimensional data in HDF5 files.
 """
 import sys, os.path
 ETM_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -22,7 +24,30 @@ def MergeHDF52D(simulation_directory,
                 verbose=False,
                 overwrite_files=False, 
                 skip_if_exists=False):
+    """
+    Merge together HDF5 files in different directories.
 
+    Args:
+    simulation_directory - str - absolute directory of simulation data
+    input_directories - list(str) - relative directorys to HDF5 files to be merged from simulation directory
+    input_filename - str - name of HDF5 file to be merged
+    output_directory - str - location to save merged HDF5 data. Taken as relative from simulation_directory
+    output_filename - str - filename for output HDF5 file
+
+    Kwargs:
+    verbose=False - bool - verbosity of output to IO
+    overwrite_files=False - bool - overwrite existing output files if present
+    skip_if_exists=False - bool - abort merging if output file already exists
+    
+    This function is intended for use in zipping together files output by the 
+    Einstein Toolkit. The different directories in 'input_directories' are read
+    in reverse order, so that given a list of directories in chronlogically 
+    produced order, if there are duplicates of datapoints, those in newer files
+    are preferred.
+    
+    Data is read from /simulation_directory/input_directories/input_filename 
+    and saved to /simulation_directory/output_directory/output_filename.
+    """
     iterations_copied = []
     iterations_checked = []
 

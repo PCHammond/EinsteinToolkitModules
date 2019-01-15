@@ -30,7 +30,7 @@ def MergeASCFilesToNPY(simulation_directory,
     input_filename - str - name of ASC file to be merged
 
     Kwargs:
-    output_directory=None - str - option location to save merged ASC data as .npy. Taken as relative from simulation_directory
+    output_directory=None - str - optional location to save merged ASC data as .npy. Taken as relative from simulation_directory
     output_filename=None - str - filename for output .npy
     remove_asc=False - bool - remove .asc from end of filename when saving as .npy
     verbose=False - bool - verbosity of output to IO
@@ -38,7 +38,7 @@ def MergeASCFilesToNPY(simulation_directory,
     skip_if_exists=False - bool - abort merging if output file already exists
 
     Returns:
-    array - merged data
+    array(float) - merged data
     
     This function is intended for use in zipping together files output by the 
     Einstein Toolkit. The different directories in 'input_directories' are read
