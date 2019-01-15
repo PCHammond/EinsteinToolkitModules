@@ -4,6 +4,8 @@
 Created on Wed Nov 28 13:57:22 2018
 
 @author: pch1g13
+
+2+1-dimensional plotting functions.
 """
 
 import matplotlib as mpl
@@ -14,15 +16,54 @@ import numpy as np
 from decimal import Decimal
 
 def DecimalExponent(number):
+    """
+    Base-10 exponent of number.
+    """
     (sign, digits, exponent) = Decimal(number).as_tuple()
     return len(digits) + exponent - 1
 
 def DecimalMantissa(number):
+    """
+    Base-10 mantissa of number.
+    """
     return Decimal(number).scaleb(-DecimalExponent(number)).normalize()
 
-def PlotScalar2D(data,xs,ys,simulation_directory,output_directory,filename,fig_size=[8,4.5],fig_dpi=480,imshow_kwargs={},labels={},verbose=False):
-    """Make plot of 2D scalar field and save to disk"""
+def PlotScalar2D(data,
+                 xs,
+                 ys,
+                 simulation_directory,
+                 output_directory,
+                 filename,
+                 fig_size=[8,4.5],
+                 fig_dpi=480,
+                 imshow_kwargs={},
+                 labels={},
+                 verbose=False):
+    """
+    Make plot of 2D scalar field and save to disk.
+
+    Args:
+    data - array(float) - scalar data to plot
+    xs - array(float) - x coordinates of domain
+    ys - array(float) - y coordinates of domain
+    simulation_directory - str - absolute location of simulation data
+    output_directory - str - relative location to save figure
+    filename - str - filename to save with
     
+    Kwargs:
+    fig_size=[8,4.5] - list(float) - size in inches of figure
+    fig_dpi=480 - int - resolution of figure to save
+    imshow_kwargs={} - dict - optional arguements passed to imshow
+    labels={} - dict - labels for plot, see below for expected values
+    verbose=False - bool - print messages to IO
+
+    Possible values in labels:
+    xAxis - label for X-Axis
+    yAxis - label for Y-Axis
+    Title - title for figure
+    Time - time label for figure
+    Colourbar - label for colourbar, if not present, no colourbar will be added
+    """
     ### Set up Matplotlib ###
     plt.ioff()
     mpl.rcParams['mathtext.fontset'] = 'stix'
@@ -96,8 +137,42 @@ def PlotScalar2D(data,xs,ys,simulation_directory,output_directory,filename,fig_s
     
     return None
 
-def PlotScalarLog2D(data,xs,ys,simulation_directory,output_directory,filename,fig_size=[8,4.5],fig_dpi=480,imshow_kwargs={},labels={},verbose=False):
-    """Make plot of log10 of 2D scalar field and save to disk"""
+def PlotScalarLog2D(data,
+                    xs,
+                    ys,
+                    simulation_directory,
+                    output_directory,
+                    filename,
+                    fig_size=[8,4.5],
+                    fig_dpi=480,
+                    imshow_kwargs={},
+                    labels={},
+                    verbose=False):
+    """
+    Make plot of log10 of 2D scalar field and save to disk.
+
+    Args:
+    data - array(float) - scalar data to plot
+    xs - array(float) - x coordinates of domain
+    ys - array(float) - y coordinates of domain
+    simulation_directory - str - absolute location of simulation data
+    output_directory - str - relative location to save figure
+    filename - str - filename to save with
+    
+    Kwargs:
+    fig_size=[8,4.5] - list(float) - size in inches of figure
+    fig_dpi=480 - int - resolution of figure to save
+    imshow_kwargs={} - dict - optional arguements passed to imshow
+    labels={} - dict - labels for plot, see below for expected values
+    verbose=False - bool - print messages to IO
+
+    Possible values in labels:
+    xAxis - label for X-Axis
+    yAxis - label for Y-Axis
+    Title - title for figure
+    Time - time label for figure
+    Colourbar - label for colourbar, if not present, no colourbar will be added
+    """
     
     ### Set up Matplotlib ###
     plt.ioff()
@@ -173,8 +248,47 @@ def PlotScalarLog2D(data,xs,ys,simulation_directory,output_directory,filename,fi
     
     return None
 
-def PlotVelRhoRGB2D(speed,direction,log_density,xs,ys,simulation_directory,output_directory,filename,data_kwargs={},fig_size=[8,4.5],fig_dpi=480,imshow_kwargs={},labels={},verbose=False):
-    """Make plot of velocity and log_density, and save to disk"""
+def PlotVelRhoRGB2D(speed,
+                    direction,
+                    log_density,
+                    xs,
+                    ys,
+                    simulation_directory,
+                    output_directory,
+                    filename,
+                    data_kwargs={},
+                    fig_size=[8,4.5],
+                    fig_dpi=480,
+                    imshow_kwargs={},
+                    labels={},
+                    verbose=False):
+    """
+    Make plot of velocity and log_density, and save to disk.
+
+    Args:
+    speed - array(float) - speed data to plot
+    direction - array(float) - direction data to plot
+    log_density - array(float) - log10 of density data
+    xs - array(float) - x coordinates of domain
+    ys - array(float) - y coordinates of domain
+    simulation_directory - str - absolute location of simulation data
+    output_directory - str - relative location tscalaro save figure
+    filename - str - filename to save with
+    
+    Kwargs:
+    fig_size=[8,4.5] - list(float) - size in inches of figure
+    fig_dpi=480 - int - resolution of figure to save
+    imshow_kwargs={} - dict - optional arguements passed to imshow
+    labels={} - dict - labels for plot, see below for expected values
+    verbose=False - bool - print messages to IO
+
+    Possible values in labels:
+    xAxis - label for X-Axis
+    yAxis - label for Y-Axis
+    Title - title for figure
+    Time - time label for figure
+    Colourbar - label for density colourbar
+    """
     
     ### Set up Matplotlib ###
     plt.ioff()
