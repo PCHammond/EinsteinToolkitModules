@@ -14,19 +14,27 @@ from string import Template
 # Parent directory of EinsteinToolkitModules
 ETMDirectory = "/mainfs/home/pch1g13/Python"
 
-# Simulation Directory
-simulationDirectory = "/mainfs/scratch/pch1g13/simulations/nsns_G2_12vs12_long/"
-
 # Scripts subdirectory
 scriptDirectory = "Master/Scripts/"
 
+# Simulation Directory
+simulationDirectory = "/mainfs/scratch/pch1g13/simulations/nsns_G2_12vs12_long/"
+
+# Substitutions to make in template scripts
+substitutions = {"simulationDirectory" : simulationDirectory,
+                 "inputFolders" : "128",
+                 "dataSubfolder" : "nsns_G2_12vs12_long/",
+                 "ETMDirectory" : ETMDirectory,
+                 "InitialSeparation" : 67.7,
+                 "InitialMass" : 2.4}
+
 # Scripts to create
-template_filenames = ["DataMergeMaster_template.py",
-                      "GWAnalysisMaster_template.py",
-                      "GetRho2DFramesMaster_template.py",
+template_filenames = ["DataMerge_template.py",
+                      "GWAnalysis_template.py",
+                      "Rho2DFrames_template.py",
                       "ClearCheckpoints_template.py",
-                      "GetTracer2DFramesMaster_template.py",
-                      "GetVelRho2DFramesMaster_template.py",
+                      "Tracer2DFrames_template.py",
+                      "VelRho2DFrames_template.py",
                       "SphericalGWAnalysis_template.py",
                       "GWAnalysisWeyl4Extrap_template.py"]
 
@@ -40,22 +48,27 @@ output_filenames = ["DataMerge.py",
                     "SphericalGWs.py",
                     "GWAnalysisWeyl4.py"]
 
-# Substitutions to make in template scripts
-substitutions = {"simulationDirectory" : simulationDirectory,
-                 "inputFolders" : "128",
-                 "dataSubfolder" : "nsns_G2_12vs12_long/",
-                 "ETMDirectory" : ETMDirectory,
-                 "InitialSeparation" : 67.7,
-                 "InitialMass" : 2.4}
-
 ### Verify directory structure
 if not(os.path.isdir(simulationDirectory + scriptDirectory)):
     print(simulationDirectory + scriptDirectory + " not found, creating")
     os.makedirs(simulationDirectory + scriptDirectory)
 
+if os.listdir(simulationDirectory + scriptDirectory):
+    print(simulationDirectory + scriptDirectory + " is not empty.")
+    done = False
+    while done==False:
+        response = input("confirm overwrite? (y/n) ")
+        if response=="y":
+            done = True
+        elif response=="n":
+            print("Script generation cancelled.")
+            raise RuntimeError("Script destination folder is not empty and overwrite was blocked.")
+        else:
+            print("Response not understood, respond 'y' to overwite existing scripts, or 'n' to cancel operation.")
+
 ### Create scripts
 for i in range(len(template_filenames)):
-    template_file = open(template_filenames[i], "r")
+    template_file = open("ScriptTemplates/" + template_filenames[i], "r")
     output_file = open(simulationDirectory + scriptDirectory + output_filenames[i], "w")
 
     output_file.write('"""\n')
