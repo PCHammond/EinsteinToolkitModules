@@ -4,6 +4,8 @@
 Created on Tue Nov 27 16:46:53 2018
 
 @author: pch1g13
+
+Common function for 2+1 dimensional analysis.
 """
 import sys, os.path
 ETM_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -13,6 +15,18 @@ from Common import GetKeysForRefinement_Level
 import numpy as np
 
 def GetDomainAfterTransforms(xs,ys,transforms):
+    """
+    Determine size of simulation domain after transformations.
+    
+    Args:
+    xs - array(float) - starting x coordinates
+    ys - array(float) - starting y coordinates
+    transforms - list(str) - list of transformation names in the order they are applied
+
+    Returns:
+    array(float) - transformed x coordinates
+    array(float) - transformed y coordinates
+    """
     xmin = np.min(xs)
     xmax = np.max(xs)
     ymin = np.min(ys)
@@ -37,6 +51,15 @@ def GetDomainAfterTransforms(xs,ys,transforms):
     return xs_output, ys_output
 
 def GetDatasetExtent2D(dataset):
+    """
+    Read extent of a dataset from HDF5 attributes.
+
+    Args:
+    dataset - HDF5 dataset - dataset for which extent is to be determined
+
+    Returns:
+    array(float) - extent of dataset in form [x_min, x_max, y_min, y_max]
+    """
     dataset_size = np.asarray(dataset.shape)[::-1]
     delta = dataset.attrs['delta']
     buffer = dataset.attrs['cctk_nghostzones']
@@ -45,6 +68,15 @@ def GetDatasetExtent2D(dataset):
     return np.array([bl[0],tr[0],bl[1],tr[1]]) ##[xmin,xmax,ymin,ymax]
 
 def GetDatasetExtentIncGhost2D(dataset):
+    """
+    Read extent of a dataset including 'ghost zones' from HDF5 attributes.
+
+    Args:
+    dataset - HDF5 dataset - dataset for which extent is to be determined
+
+    Returns:
+    array(float) - extent of dataset in form [x_min, x_max, y_min, y_max]
+    """
     dataset_size = np.asarray(dataset.shape)[::-1]
     delta = dataset.attrs['delta']
     bl = dataset.attrs['origin']
@@ -52,6 +84,19 @@ def GetDatasetExtentIncGhost2D(dataset):
     return np.array([bl[0],tr[0],bl[1],tr[1]]) ##[xmin,xmax,ymin,ymax]
 
 def GetSmallestCoveringRL2D(list_rLs,list_keys,xs,ys,file_input):
+    """
+    Determine the smallest refinement level that entirely covers the domain.
+
+    Args:
+    list_rLs - list of refinement levels under consideration
+    list_keys - list of HDF5 dataset keys
+    xs - x coordinates for domain
+    ys - y coordiantes for domain
+    file_input - HDF5 file containg keys
+
+    Returns:
+    int - smallest refiinement level that covers domain
+    """
     for rL in list_rLs[::-1]:
         keys_rL = GetKeysForRefinement_Level(rL,list_keys)
         Xs, Ys = np.meshgrid(xs,ys,indexing="ij")
