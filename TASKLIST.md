@@ -8,7 +8,8 @@
 
 ## Analysis
 ### Gravitational Waves
-- [ ] Distance-based STFT comparison
+- [ ] Distance-based STFT amplitde comparison
+- [ ] Distance-based STFT phase comparison
 
 ## Documentation
 ### Readme
