@@ -5,8 +5,12 @@
 
 ### Data Handling
 - [ ] Merge parallelisation
+- [ ] Figure generation handling
 
 ## Analysis
+### 3D
+- [ ] Volume rendering
+
 ### Gravitational Waves
 - [ ] Distance-based STFT amplitde comparison
 - [ ] Distance-based STFT phase comparison
