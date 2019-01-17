@@ -125,7 +125,7 @@ plot_labels = {"Title":r"Density",
                "Colourbar":r"$$\rho \left[ \frac{\mathrm{g}}{\mathrm{cm}^3} \right]$$"}
 
 ### Lists for parallelisation
-core_count = 4
+core_count = ${Cores_to_use}
 iteration_count = len(list_iterations)
 
 ### Do parallel figures

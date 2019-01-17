@@ -25,6 +25,7 @@ substitutions = {"simulationDirectory" : simulationDirectory,
                  "inputFolders" : "128",
                  "dataSubfolder" : "nsns_G2_12vs12_long/",
                  "ETMDirectory" : ETMDirectory,
+                 "Cores_to_use" : 4,
                  "InitialSeparation" : 67.7,
                  "InitialMass" : 2.4}
 
