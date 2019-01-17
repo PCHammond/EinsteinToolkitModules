@@ -16,22 +16,7 @@ from EinsteinToolkitModules.Common import GetLengthFactor, GetTimeFactor, GetMas
 from EinsteinToolkitModules.Modules1D.Maxima import FindMaxRho
 
 ### Wrapper function for producing figure
-def Make_Figure(it_idx,
-                list_keys,
-                plot_labels,
-                T_,
-                file_name_o,
-                frame_offset,
-                xs_output,
-                ys_output,
-                file_input,
-                transforms,
-                Rho_cgs,
-                xs_plot,
-                ys_plot,
-                simulation_directory,
-                output_directory,
-                imshow_kwargs):
+def Make_Figure(it_idx):
     iteration_current = list_iterations[it_idx]
     list_keys_iteration = GetKeysForIteration(iteration_current,list_keys)
     time_current = file_input[list_keys_iteration[0]].attrs['time']
@@ -115,6 +100,7 @@ T_ms = GetTimeFactor("ms")
 T_us = GetTimeFactor("us")
 M_ = GetMassFactor("cgs")
 Rho_cgs = M_/(L_cm**3)
+T_ = T_ms
 
 Rho_max_cgs = Rho_max*Rho_cgs
 Rho_min_cgs = Rho_min*Rho_cgs
@@ -161,7 +147,9 @@ pool = Pool(core_count)
 iterations_plotted = pool.starmap(Make_Figure, args)
 
 ### Post processing
-
+pool.close()
+pool.join()
+print(iterations_plotted)
 
 ################
 ### Old Code ###
