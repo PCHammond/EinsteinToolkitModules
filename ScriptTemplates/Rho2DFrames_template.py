@@ -136,6 +136,7 @@ iterations_plotted = pool.map(Make_Figure, range(iteration_count))
 ### Post processing
 pool.close()
 pool.join()
+print("Iterations plotted:")
 print(iterations_plotted)
 
 ################
