@@ -4,6 +4,8 @@ sys.path.append("${ETMDirectory}")
 
 import os
 from subprocess import run
+from multiprocessing import Pool
+from itertools import repeat, zip_longest
 from EinsteinToolkitModules.Common import GenerateDirectories
 from EinsteinToolkitModules.Modules1D.ASC_1D_Merge import MergeASCFilesToNPY, GenerateMultipolePsi4Names
 from EinsteinToolkitModules.Modules2D.HDF5_2D_Merge import MergeHDF52D
@@ -131,49 +133,110 @@ if not(os.path.isdir(simulation_directory + output_directory_3D)):
         print(simulation_directory + output_directory_3D + " not found, stopping")
         raise ValueError
 
+core_count = ${Cores_to_use}
+pool = Pool(core_count)
+
 ### Do ASC Merge ###
+print("Merging ASC files.")
+arg_count = len(input_filenames_asc)
+args = zip_longest(repeat(simulation_directory,arg_count),
+                   repeat(input_directories,arg_count),
+                   input_filenames_asc,
+                   repeat(output_directory_asc,arg_count),
+                   output_filenames_asc,
+                   repeat(False,arg_count),
+                   repeat(True,arg_count),
+                   repeat(overwrite_files,arg_count),
+                   repeat(skip_if_exists,arg_count))
+
+pool.starmap(MergeASCFilesToNPY, args)
+
+# Weyl4
+arg_count = len(input_filenames_psi4)
+args = zip_longest(repeat(simulation_directory,arg_count),
+                   repeat(input_directories,arg_count),
+                   input_filenames_psi4,
+                   repeat(output_directory_asc,arg_count),
+                   output_filenames_psi4,
+                   repeat(False,arg_count),
+                   repeat(True,arg_count),
+                   repeat(overwrite_files,arg_count),
+                   repeat(skip_if_exists,arg_count))
+
+pool.starmap(MergeASCFilesToNPY, args)
+
+### Do HDF5 2D Merge ###
+print("Merging 2D HDF5 files.")
+arg_count = len(input_filenames_2D)
+args = zip_longest(repeat(simulation_directory,arg_count),
+                   repeat(input_directories,arg_count),
+                   input_filenames_2D,
+                   repeat(output_directory_2D,arg_count),
+                   output_filenames_2D,
+                   repeat(False,arg_count),
+                   repeat(overwrite_files,arg_count),
+                   repeat(skip_if_exists,arg_count))
+
+pool.starmap(MergeHDF52D, args)
+
+### Do HDF5 3D Merge ###
+print("Merging 3D HDF5 files.")
+arg_count = len(output_filenames_3D)
+args = zip_longest(repeat(simulation_directory,arg_count),
+                   repeat(input_directories,arg_count),
+                   input_filenames_3D,
+                   repeat(output_directory_3D,arg_count),
+                   output_filenames_3D,
+                   repeat(False,arg_count),
+                   repeat(overwrite_files,arg_count),
+                   repeat(skip_if_exists,arg_count))
+
+pool.starmap(MergeHDF53D, args)
+
+################
+### Old Code ###
+################
+
+"""
 for i in range(len(input_filenames_asc)):
-    if verbose or veryverbose: print("Merging " + input_filenames_asc[i])
     MergeASCFilesToNPY(simulation_directory, 
                        input_directories, 
                        input_filenames_asc[i], 
                        output_directory=output_directory_asc, 
                        output_filename=output_filenames_asc[i], 
-                       verbose=veryverbose,
+                       verbose=False,
                        remove_asc=True,
                        overwrite_files=overwrite_files,
                        skip_if_exists=skip_if_exists)
 
 for i in range(len(input_filenames_psi4)):
-    if verbose or veryverbose: print("Merging " + input_filenames_psi4[i])
     MergeASCFilesToNPY(simulation_directory, 
                        input_directories, 
                        input_filenames_psi4[i], 
                        output_directory=output_directory_asc, 
                        output_filename=output_filenames_psi4[i], 
-                       verbose=veryverbose,
+                       verbose=False,
                        remove_asc=True,
                        overwrite_files=overwrite_files,
                        skip_if_exists=skip_if_exists)
 
-### Do HDF5 2D Merge ###
 for i in range(len(input_filenames_2D)):
     MergeHDF52D(simulation_directory, 
                 input_directories, 
                 input_filenames_2D[i], 
                 output_directory_2D, 
                 output_filenames_2D[i], 
-                verbose=verbose,
+                verbose=False,
                 overwrite_files=overwrite_files,
                 skip_if_exists=skip_if_exists)
-    
-### Do HDF5 3D Merge ###
+
 for i in range(len(output_filenames_3D)):
     MergeHDF53D(simulation_directory, 
                 input_directories, 
                 input_filenames_3D[i], 
                 output_directory_3D, 
                 output_filenames_3D[i], 
-                verbose=verbose, 
+                verbose=False, 
                 overwrite_files=overwrite_files,
                 skip_if_exists=skip_if_exists)
+"""
