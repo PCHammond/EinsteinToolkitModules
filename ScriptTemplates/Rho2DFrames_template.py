@@ -16,7 +16,7 @@ from EinsteinToolkitModules.Modules1D.Maxima import FindMaxRho
 
 ### Wrapper function for producing figure
 def Make_Figure(it_idx):
-    HDF5_lock.aquire()
+    HDF5_lock.acquire()
     file_input = h5py.File(simulation_directory + input_directory + file_name,'r')
     HDF5_lock.release()
     iteration_current = list_iterations[it_idx]
