@@ -6,8 +6,7 @@ sys.path.append("${ETMDirectory}")
 import os
 import h5py
 import numpy as np
-from itertools import zip_longest, repeat
-from multiprocessing import Pool
+from multiprocessing import Pool, Lock
 from EinsteinToolkitModules.Modules2D.Interp2D import Interp2DScalar
 from EinsteinToolkitModules.Modules2D.Common2D import GetSmallestCoveringRL2D, GetDomainAfterTransforms
 from EinsteinToolkitModules.Modules2D.Plot2D import PlotScalarLog2D
@@ -17,7 +16,9 @@ from EinsteinToolkitModules.Modules1D.Maxima import FindMaxRho
 
 ### Wrapper function for producing figure
 def Make_Figure(it_idx):
+    HDF5_lock.aquire()
     file_input = h5py.File(simulation_directory + input_directory + file_name,'r')
+    HDF5_lock.release()
     iteration_current = list_iterations[it_idx]
     list_keys_iteration = GetKeysForIteration(iteration_current,list_keys)
     time_current = file_input[list_keys_iteration[0]].attrs['time']
@@ -128,6 +129,7 @@ core_count = 4
 iteration_count = len(list_iterations)
 
 ### Do parallel figures
+HDF5_lock = Lock()
 pool = Pool(core_count)
 iterations_plotted = pool.map(Make_Figure, range(iteration_count))
 
