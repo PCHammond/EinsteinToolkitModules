@@ -17,6 +17,7 @@ from EinsteinToolkitModules.Modules1D.Maxima import FindMaxRho
 
 ### Wrapper function for producing figure
 def Make_Figure(it_idx):
+    file_input = h5py.File(simulation_directory + input_directory + file_name,'r')
     iteration_current = list_iterations[it_idx]
     list_keys_iteration = GetKeysForIteration(iteration_current,list_keys)
     time_current = file_input[list_keys_iteration[0]].attrs['time']
@@ -124,7 +125,7 @@ plot_labels = {"Title":r"Density",
 
 ### Lists for parallelisation
 core_count = 4
-iteration_count = len(list_iterations))
+iteration_count = len(list_iterations)
 
 ### Do parallel figures
 pool = Pool(core_count)
