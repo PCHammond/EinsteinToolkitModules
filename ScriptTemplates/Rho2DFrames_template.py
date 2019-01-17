@@ -6,12 +6,49 @@ sys.path.append("${ETMDirectory}")
 import os
 import h5py
 import numpy as np
+from multiprocessing import Pool, Lock
 from EinsteinToolkitModules.Modules2D.Interp2D import Interp2DScalar
 from EinsteinToolkitModules.Modules2D.Common2D import GetSmallestCoveringRL2D, GetDomainAfterTransforms
 from EinsteinToolkitModules.Modules2D.Plot2D import PlotScalarLog2D
 from EinsteinToolkitModules.Common import GetIterationArray, GetRefinementLevelArray, GetKeysForIteration
 from EinsteinToolkitModules.Common import GetLengthFactor, GetTimeFactor, GetMassFactor
 from EinsteinToolkitModules.Modules1D.Maxima import FindMaxRho
+
+### Wrapper function for producing figure
+def Make_Figure(it_idx):
+    HDF5_lock.acquire()
+    file_input = h5py.File(simulation_directory + input_directory + file_name,'r')
+    HDF5_lock.release()
+    iteration_current = list_iterations[it_idx]
+    list_keys_iteration = GetKeysForIteration(iteration_current,list_keys)
+    time_current = file_input[list_keys_iteration[0]].attrs['time']
+    plot_labels["Time"] = r"$$t = " + r"{:.3f}".format(time_current*T_) + r" \mathrm{ms}$$"
+    filename_current = file_name_o + ".fig" + str(it_idx+frame_offset).zfill(4)
+    print("Creating " + filename_current + " for iteration " + str(iteration_current) + ", time = " + str("{0:.3f}".format(time_current)))
+    list_rLs_current = GetRefinementLevelArray(list_keys_iteration)
+    rL_start = GetSmallestCoveringRL2D(list_rLs_current,list_keys_iteration,xs_output,ys_output,file_input)
+    interp_rLs = list_rLs_current[np.nonzero(list_rLs_current == rL_start)[0][0]:]
+    interped_data = Interp2DScalar(interp_rLs,
+                                   list_keys_iteration,
+                                   xs_output,
+                                   ys_output,
+                                   file_input,
+                                   do_clip = True, 
+                                   clip_bounds = np.array([1e-11,1]), 
+                                   k_spline = 1,
+                                   transforms = transforms) * Rho_cgs
+    PlotScalarLog2D(interped_data,
+                    xs_plot,
+                    ys_plot,
+                    simulation_directory,
+                    output_directory,
+                    filename_current,
+                    fig_size=[8,4.5],
+                    fig_dpi=480,
+                    imshow_kwargs=imshow_kwargs,
+                    labels=plot_labels,
+                    verbose=False)
+    return iteration_current
 
 ### Directory setup
 # Input
@@ -65,6 +102,7 @@ T_ms = GetTimeFactor("ms")
 T_us = GetTimeFactor("us")
 M_ = GetMassFactor("cgs")
 Rho_cgs = M_/(L_cm**3)
+T_ = T_ms
 
 Rho_max_cgs = Rho_max*Rho_cgs
 Rho_min_cgs = Rho_min*Rho_cgs
@@ -86,8 +124,29 @@ plot_labels = {"Title":r"Density",
                "yAxis":r"$$y \left[ \mathrm{km} \right]$$",
                "Colourbar":r"$$\rho \left[ \frac{\mathrm{g}}{\mathrm{cm}^3} \right]$$"}
 
+### Lists for parallelisation
+core_count = ${Cores_to_use}
+iteration_count = len(list_iterations)
+
+### Do parallel figures
+HDF5_lock = Lock()
+pool = Pool(core_count)
+iterations_plotted = pool.map(Make_Figure, range(iteration_count))
+
+### Post processing
+pool.close()
+pool.join()
+print("Iterations plotted:")
+print(iterations_plotted)
+
+################
+### Old Code ###
+################
+
+"""
+
 ### Anaylsis loop
-for it_idx in range(len(list_iterations)):
+for it_idx in range(iteration_count):
     # Get current iteration
     iteration_current = list_iterations[it_idx]
 
@@ -138,3 +197,5 @@ for it_idx in range(len(list_iterations)):
                     imshow_kwargs=imshow_kwargs,
                     labels=plot_labels,
                     verbose=False)
+
+"""
