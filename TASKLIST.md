@@ -5,7 +5,7 @@
 
 ### Data Handling
 - [ ] Merge parallelisation
-- [ ] Figure generation handling
+- [ ] Figure generation parallelisation
 
 ## Analysis
 ### 3D
