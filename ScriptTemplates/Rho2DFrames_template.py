@@ -124,27 +124,11 @@ plot_labels = {"Title":r"Density",
 
 ### Lists for parallelisation
 core_count = 4
-iteration_count = len(list_iterations)
-args = zip_longest(range(iteration_count),
-                   repeat(list_keys,iteration_count),
-                   repeat(plot_labels,iteration_count),
-                   repeat(T_ms,iteration_count),
-                   repeat(file_name_o,iteration_count),
-                   repeat(frame_offset,iteration_count),
-                   repeat(xs_output,iteration_count),
-                   repeat(ys_output,iteration_count),
-                   repeat(file_input,iteration_count),
-                   repeat(transforms,iteration_count),
-                   repeat(Rho_cgs,iteration_count),
-                   repeat(xs_plot,iteration_count),
-                   repeat(ys_plot,iteration_count),
-                   repeat(simulation_directory,iteration_count),
-                   repeat(output_directory,iteration_count),
-                   repeat(imshow_kwargs,iteration_count))
+iteration_count = len(list_iterations))
 
 ### Do parallel figures
 pool = Pool(core_count)
-iterations_plotted = pool.starmap(Make_Figure, args)
+iterations_plotted = pool.map(Make_Figure, range(iteration_count))
 
 ### Post processing
 pool.close()
