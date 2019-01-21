@@ -18,7 +18,6 @@ from EinsteinToolkitModules.Modules1D.Maxima import FindMaxRho
 def Make_Figure(it_idx):
     HDF5_lock.acquire()
     file_input = h5py.File(simulation_directory + input_directory + file_name,'r')
-    HDF5_lock.release()
     iteration_current = list_iterations[it_idx]
     list_keys_iteration = GetKeysForIteration(iteration_current,list_keys)
     time_current = file_input[list_keys_iteration[0]].attrs['time']
@@ -37,6 +36,7 @@ def Make_Figure(it_idx):
                                    clip_bounds = np.array([1e-11,1]), 
                                    k_spline = 1,
                                    transforms = transforms) * Rho_cgs
+    HDF5_lock.release()
     PlotScalarLog2D(interped_data,
                     xs_plot,
                     ys_plot,
@@ -94,6 +94,7 @@ frame_offset = 0
 #list_iterations = [0]
 #list_iterations = [list_iterations[1],list_iterations[-1]]
 #list_iterations = list_iterations[frame_offset:]
+#list_iterations = list_iterations[::80]
 
 ### Unit conversion from geometric to cgs/km
 L_cm = GetLengthFactor("cm")
